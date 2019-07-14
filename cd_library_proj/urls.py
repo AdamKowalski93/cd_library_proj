@@ -17,15 +17,21 @@ from django.contrib import admin
 from django.urls import path, include
 from cd_library import views
 from rest_framework import routers
+from cd_library.views.Types import TypesView
+from cd_library.views.TypesApi import *
+from cd_library.views.Cds import Cds
+from cd_library.views.CdAPI import Cd
 
-from cd_library.views import CdDescriptionView
-
-router = routers.DefaultRouter()
+# router = routers.DefaultRouter()
 # router.register('cd', viewset=views.CdDescriptionView)
-router.register('types', viewset=views.TypesView)
+# router.register('types', viewset=TypesView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('cd', CdDescriptionView.as_view()),
-    path('', include(router.urls))
+    path('types/', TypesView.as_view()),
+    path('type/', Type.as_view()),
+    path('type/<int:type_id>/', Type.as_view()),
+    path('cds/', Cds.as_view()),
+    path('cd/<int:cd_id>/', Cd.as_view()),
+    path('cd/', Cd.as_view())
 ]

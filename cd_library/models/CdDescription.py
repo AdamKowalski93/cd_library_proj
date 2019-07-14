@@ -8,4 +8,4 @@ class CD(models.Model):
     description = models.TextField(null=True, blank=True)
     artist = models.CharField(max_length=40)
     date = models.DateField()
-    type = models.ManyToManyField(Types)
+    type = models.ForeignKey(Types,on_delete=models.CASCADE)
