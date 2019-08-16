@@ -1,0 +1,70 @@
+3apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  labels:
+    app: db
+spec:
+  ports:
+  - port: 3232
+    targetPort: 3232
+  selector:
+    app: db
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: db
+  labels:
+    app: db    
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: db
+      labels:
+        app: db 
+    spec:
+      containers:
+        - name: db
+          image: mysql:latest
+          imagePullPolicy: Never
+          command: ["/bin/sh", "-c"]
+          args: ["-c", "echo db started"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+  labels:
+    app: app 
+spec:
+  ports:
+  - port: 8000
+    targetPort: 8000
+  selector:
+    app: app
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: app
+  labels:
+    app: app    
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: app
+      labels:
+        app: app
+    spec:
+      containers:
+      - name: app  
+        image: linux:alpine
+        imagePullPolicy: Never
+        command: ["/bin/sh"]
+        args: ["-c", "python3 manage.py runserver 0.0.0.0:8000"]
+        env:
+        - name: PYTHONUNBUFFERED       
+          value: "1" 
